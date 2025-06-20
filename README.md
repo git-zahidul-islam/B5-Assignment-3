@@ -65,7 +65,7 @@ A RESTful API for managing a library system built with **Express**, **TypeScript
 
    ```bash
    git clone https://github.com/git-zahidul-islam/B5-Assignment-3.git
-   cd L2-A3
+   cd B5-Assignment-3
    ````
 
 2. Install dependencies:
