@@ -1,35 +1,36 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, Router } from "express";
 import { Borrow } from "../models/borrow.model";
 
-export const borrowRoutes = express.Router();
 
-borrowRoutes.post("/", async (req: Request, res: Response) => {
-  try {
-    const { book, quantity, dueDate } = req.body;
+const borrowRoutes: Router = express.Router();
 
-    // Validate input
-    if (!book || !quantity || !dueDate) {
-      return res.status(400).json({
+borrowRoutes.post( "/", async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { book, quantity, dueDate } = req.body;
+
+      if (!book || !quantity || !dueDate) {
+        res.status(400).json({
+          success: false,
+          message: "Missing required fields: book, quantity, or dueDate",
+        });
+        return;
+      }
+
+      const data = await Borrow.borrowBook(book, quantity, new Date(dueDate));
+      res.status(201).json({
+        success: true,
+        message: "Book borrowed successfully",
+        data,
+      });
+    } catch (error: any) {
+      res.status(400).json({
         success: false,
-        message: "Missing required fields: book, quantity, or dueDate",
+        message: error.message || "Failed to borrow book",
+        error: error.message,
       });
     }
-
-    const data = await Borrow.borrowBook(book, quantity, new Date(dueDate));
-
-    res.status(201).json({
-      success: true,
-      message: "Book borrowed successfully",
-      data,
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Failed to borrow book",
-      error: error.message,
-    });
   }
-});
+);
 
 borrowRoutes.get("/", async (req: Request, res: Response) => {
   try {
@@ -48,3 +49,5 @@ borrowRoutes.get("/", async (req: Request, res: Response) => {
     });
   }
 });
+
+export default borrowRoutes;

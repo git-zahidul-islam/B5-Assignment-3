@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import { Book } from "./book.model";
-import { IBorrow } from "../interfaces/borrow.interface";
+import { IBorrow, IBorrowModel } from "../interfaces/borrow.interface";
 
 const borrowSchema = new Schema<IBorrow>(
   {
@@ -60,4 +60,4 @@ borrowSchema.statics.getBorrowedSummary = async function () {
   ]);
 };
 
-export const Borrow = model("Borrow", borrowSchema);
+export const Borrow = model<IBorrow, IBorrowModel>("Borrow", borrowSchema);
