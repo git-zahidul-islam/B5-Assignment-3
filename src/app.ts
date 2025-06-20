@@ -1,7 +1,15 @@
-import express, { Application, Request, Response }  from "express";
+import express, { Application, Request, Response } from "express";
+import { bookRoutes } from "./app/controllers/book.controller";
+import { borrowRoutes } from "./app/controllers/borrow.controller";
 
-export const app : Application = express();
+const app: Application = express();
+app.use(express.json());
 
-app.get('/',async(req : Request,res : Response)=>{
-    console.log("server running");
-})
+app.use("/api/books", bookRoutes);
+app.use("/api/borrow", borrowRoutes);
+
+app.get('/', async (req: Request, res: Response) => {
+    res.send("server is running")
+});
+
+export default app;
