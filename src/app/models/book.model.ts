@@ -32,4 +32,10 @@ const bookSchema = new Schema<IBook>(
   }
 );
 
+bookSchema.pre("save", function (next) {
+  this.available = this.copies > 0;
+  next();
+});
+
+
 export const Book = model("Book", bookSchema);
